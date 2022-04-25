@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_bloc_complete_tutorial/bloc/counter_bloc/counter_bloc.dart';
 import 'package:flutter_bloc_complete_tutorial/bloc/joke_bloc/jokes_bloc.dart';
 import 'package:flutter_bloc_complete_tutorial/services/service_locator.dart';
 import 'package:flutter_bloc_complete_tutorial/view/jokes_view.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => JokeBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CounterBloc(counter: 0),
         ),
       ],
       child: MaterialApp(
