@@ -32,4 +32,9 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       print(event);
     }
   }
+
+  @override
+  Future<void> close() {
+    return super.close();
+  }
 }
