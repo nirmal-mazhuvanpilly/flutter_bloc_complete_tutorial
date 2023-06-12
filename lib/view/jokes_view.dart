@@ -49,7 +49,7 @@ class JokesView extends StatelessWidget {
                       return ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor:
-                                snapshot ? Colors.blue : Colors.red,
+                                snapshot ? Colors.red : Colors.blue,
                           ),
                           onPressed: () {
                             counterInstance.add(DecrementCounter());

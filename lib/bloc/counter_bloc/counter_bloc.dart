@@ -11,17 +11,17 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       : super(CounterStateLoaded(counter: counter)) {
     on<IncrementCounter>(((event, emit) {
       counter = counter + 1;
-      emit(CounterStateLoaded(counter: counter));
+      emit(state.copyWith(counter: counter));
     }));
 
     on<DecrementCounter>(((event, emit) {
       counter = counter - 1;
-      emit(CounterStateLoaded(counter: counter));
+      emit(state.copyWith(counter: counter));
     }));
 
     on<SwitchColor>(((event, emit) {
       isRed = !isRed;
-      emit(CounterStateLoaded(isRed: isRed, counter: counter));
+      emit(state.copyWith(isRed: isRed));
     }));
   }
 
