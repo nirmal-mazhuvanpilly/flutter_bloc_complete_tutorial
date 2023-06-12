@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_complete_tutorial/bloc/counter_bloc/counter_bloc.dart';
@@ -14,6 +15,7 @@ class JokesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final CounterBloc counterInstance = BlocProvider.of<CounterBloc>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Jokes View"),
@@ -69,6 +71,17 @@ class JokesView extends StatelessWidget {
                   counterInstance.add(SwitchColor());
                 },
                 child: const Text("Switch Color")),
+            const SizedBox(height: 20),
+            Container(
+                color: Colors.grey.shade200,
+                child: TextFormField(controller: counterInstance.controller)),
+            TextButton(
+                onPressed: () {
+                  if (kDebugMode) {
+                    print(counterInstance.controller.text);
+                  }
+                },
+                child: const Text("Get Text Form Field Value")),
             const SizedBox(height: 20),
             BlocBuilder<JokeBloc, JokeState>(
               builder: (context, state) {

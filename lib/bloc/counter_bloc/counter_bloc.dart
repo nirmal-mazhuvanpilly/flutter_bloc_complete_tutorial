@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_bloc_complete_tutorial/bloc/counter_bloc/counter_event.dart';
@@ -6,6 +7,8 @@ import 'package:flutter_bloc_complete_tutorial/bloc/counter_bloc/counter_state.d
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
   int counter;
   bool isRed = false;
+
+  final TextEditingController controller = TextEditingController();
 
   CounterBloc({required this.counter})
       : super(CounterStateLoaded(counter: counter)) {
@@ -35,6 +38,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
 
   @override
   Future<void> close() {
+    controller.dispose();
     return super.close();
   }
 }
