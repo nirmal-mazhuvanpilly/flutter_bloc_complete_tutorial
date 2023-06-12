@@ -18,58 +18,89 @@ class JokesView extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Jokes View"),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          BlocSelector<CounterBloc, CounterState, int>(
-              selector: (state) =>
-                  (state is CounterStateLoaded) ? (state.counter ?? 0) : 0,
-              builder: (context, snapshot) {
-                return Text(
-                  snapshot.toString(),
-                  style: const TextStyle(fontSize: 30),
-                );
-              }),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              BlocSelector<CounterBloc, CounterState, bool>(
-                  selector: (state) => (state is CounterStateLoaded)
-                      ? (state.isRed ?? false)
-                      : false,
-                  builder: (context, snapshot) {
-                    return ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: snapshot ? Colors.blue : Colors.red,
+      body: BlocListener<CounterBloc, CounterState>(
+        listener: (context, state) {
+          if (state is CounterStateLoaded) {
+            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+              content: Text('snack'),
+            ));
+          }
+        },
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            BlocSelector<CounterBloc, CounterState, int>(
+                selector: (state) =>
+                    (state is CounterStateLoaded) ? (state.counter ?? 0) : 0,
+                builder: (context, snapshot) {
+                  return Text(
+                    snapshot.toString(),
+                    style: const TextStyle(fontSize: 30),
+                  );
+                }),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BlocSelector<CounterBloc, CounterState, bool>(
+                    selector: (state) => (state is CounterStateLoaded)
+                        ? (state.isRed ?? false)
+                        : false,
+                    builder: (context, snapshot) {
+                      return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                snapshot ? Colors.blue : Colors.red,
+                          ),
+                          onPressed: () {
+                            counterInstance.add(DecrementCounter());
+                          },
+                          child: const Text("-"));
+                    }),
+                const SizedBox(width: 10),
+                ElevatedButton(
+                    onPressed: () {
+                      counterInstance.add(IncrementCounter());
+                    },
+                    child: const Text("+")),
+              ],
+            ),
+            TextButton(
+                onPressed: () {
+                  counterInstance.add(SwitchColor());
+                },
+                child: const Text("Switch Color")),
+            const SizedBox(height: 20),
+            BlocBuilder<JokeBloc, JokeState>(
+              builder: (context, state) {
+                if (state is JokesLoadingState) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CircularProgressIndicator(),
+                        const SizedBox(height: 25),
+                        ElevatedButton(
+                          onPressed: () {
+                            BlocProvider.of<JokeBloc>(context)
+                                .add(LoadJokeEvent());
+                          },
+                          child: const Text('Load New Joke'),
                         ),
-                        onPressed: () {
-                          counterInstance.add(DecrementCounter());
-                        },
-                        child: const Text("-"));
-                  }),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                  onPressed: () {
-                    counterInstance.add(IncrementCounter());
-                  },
-                  child: const Text("+")),
-            ],
-          ),
-          TextButton(
-              onPressed: () {
-                counterInstance.add(SwitchColor());
-              },
-              child: const Text("Switch Color")),
-          const SizedBox(height: 20),
-          BlocBuilder<JokeBloc, JokeState>(
-            builder: (context, state) {
-              if (state is JokesLoadingState) {
-                return Center(
-                  child: Column(
+                      ],
+                    ),
+                  );
+                }
+                if (state is JokesLoadedState) {
+                  return Center(
+                      child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const CircularProgressIndicator(),
-                      const SizedBox(height: 25),
+                      Text(state.jokes?.category ?? "",
+                          textAlign: TextAlign.center),
+                      Text(state.jokes?.setup ?? "",
+                          textAlign: TextAlign.center),
+                      Text(state.jokes?.delivery ?? "",
+                          textAlign: TextAlign.center),
                       ElevatedButton(
                         onPressed: () {
                           BlocProvider.of<JokeBloc>(context)
@@ -78,48 +109,29 @@ class JokesView extends StatelessWidget {
                         child: const Text('Load New Joke'),
                       ),
                     ],
-                  ),
+                  ));
+                }
+                if (state is JokesErrorState) {
+                  return const Center(child: Text("Error to load data"));
+                }
+                return ElevatedButton(
+                  onPressed: () {
+                    BlocProvider.of<JokeBloc>(context).add(LoadJokeEvent());
+                  },
+                  child: const Text('Load New Joke'),
                 );
-              }
-              if (state is JokesLoadedState) {
-                return Center(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(state.jokes?.category ?? "",
-                        textAlign: TextAlign.center),
-                    Text(state.jokes?.setup ?? "", textAlign: TextAlign.center),
-                    Text(state.jokes?.delivery ?? "",
-                        textAlign: TextAlign.center),
-                    ElevatedButton(
-                      onPressed: () {
-                        BlocProvider.of<JokeBloc>(context).add(LoadJokeEvent());
-                      },
-                      child: const Text('Load New Joke'),
-                    ),
-                  ],
-                ));
-              }
-              if (state is JokesErrorState) {
-                return const Center(child: Text("Error to load data"));
-              }
-              return ElevatedButton(
-                onPressed: () {
-                  BlocProvider.of<JokeBloc>(context).add(LoadJokeEvent());
-                },
-                child: const Text('Load New Joke'),
-              );
-            },
-          ),
-          const SizedBox(height: 20),
-          ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const CounterView(),
-                ));
               },
-              child: const Text("Next page")),
-        ],
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => const CounterView(),
+                  ));
+                },
+                child: const Text("Next page")),
+          ],
+        ),
       ),
     );
   }
