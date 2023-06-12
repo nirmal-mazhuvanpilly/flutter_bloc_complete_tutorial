@@ -13,6 +13,7 @@ class JokesView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final CounterBloc counterInstance = BlocProvider.of<CounterBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Jokes View"),
@@ -20,39 +21,45 @@ class JokesView extends StatelessWidget {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          BlocBuilder<CounterBloc, CounterState>(
-            builder: (context, state) {
-              final CounterBloc counterInstance =
-                  BlocProvider.of<CounterBloc>(context);
-              if (state is CounterStateLoaded) {
-                return Column(
-                  children: [
-                    Text(
-                      state.counter.toString(),
-                      style: const TextStyle(fontSize: 30),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              counterInstance.add(DecrementCounter());
-                            },
-                            child: const Text("-")),
-                        const SizedBox(width: 10),
-                        ElevatedButton(
-                            onPressed: () {
-                              counterInstance.add(IncrementCounter());
-                            },
-                            child: const Text("+")),
-                      ],
-                    ),
-                  ],
+          BlocSelector<CounterBloc, CounterState, int>(
+              selector: (state) =>
+                  (state is CounterStateLoaded) ? (state.counter ?? 0) : 0,
+              builder: (context, snapshot) {
+                return Text(
+                  snapshot.toString(),
+                  style: const TextStyle(fontSize: 30),
                 );
-              }
-              return const SizedBox();
-            },
+              }),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              BlocSelector<CounterBloc, CounterState, bool>(
+                  selector: (state) => (state is CounterStateLoaded)
+                      ? (state.isRed ?? false)
+                      : false,
+                  builder: (context, snapshot) {
+                    return ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: snapshot ? Colors.blue : Colors.red,
+                        ),
+                        onPressed: () {
+                          counterInstance.add(DecrementCounter());
+                        },
+                        child: const Text("-"));
+                  }),
+              const SizedBox(width: 10),
+              ElevatedButton(
+                  onPressed: () {
+                    counterInstance.add(IncrementCounter());
+                  },
+                  child: const Text("+")),
+            ],
           ),
+          TextButton(
+              onPressed: () {
+                counterInstance.add(SwitchColor());
+              },
+              child: const Text("Switch Color")),
           const SizedBox(height: 20),
           BlocBuilder<JokeBloc, JokeState>(
             builder: (context, state) {

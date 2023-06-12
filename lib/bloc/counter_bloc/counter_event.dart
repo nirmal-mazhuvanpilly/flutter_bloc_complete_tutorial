@@ -15,3 +15,8 @@ class DecrementCounter extends CounterEvent {
   @override
   List<Object?> get props => [];
 }
+
+class SwitchColor extends CounterEvent {
+  @override
+  List<Object?> get props => [];
+}

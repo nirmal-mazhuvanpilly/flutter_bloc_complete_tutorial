@@ -6,7 +6,10 @@ abstract class CounterState extends Equatable {}
 
 class CounterStateLoaded extends CounterState {
   final int? counter;
-  CounterStateLoaded({this.counter});
+  final bool? isRed;
+
+  CounterStateLoaded({this.counter, this.isRed});
+
   @override
-  List<Object?> get props => [counter];
+  List<Object?> get props => [counter, isRed];
 }
