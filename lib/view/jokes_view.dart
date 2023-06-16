@@ -52,14 +52,15 @@ class JokesView extends StatelessWidget {
                                 snapshot ? Colors.red : Colors.blue,
                           ),
                           onPressed: () {
-                            counterInstance.add(DecrementCounter());
+                            counterInstance
+                                .add(const DecrementCounter(count: 2));
                           },
                           child: const Text("-"));
                     }),
                 const SizedBox(width: 10),
                 ElevatedButton(
                     onPressed: () {
-                      counterInstance.add(IncrementCounter());
+                      counterInstance.add(const IncrementCounter(count: 2));
                     },
                     child: const Text("+")),
               ],

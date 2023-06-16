@@ -53,13 +53,13 @@ class _CounterViewState extends State<CounterView> {
                       children: [
                         ElevatedButton(
                             onPressed: () {
-                              counterInstance.add(DecrementCounter());
+                              counterInstance.add(const DecrementCounter());
                             },
                             child: const Text("-")),
                         const SizedBox(width: 10),
                         ElevatedButton(
                             onPressed: () {
-                              counterInstance.add(IncrementCounter());
+                              counterInstance.add(const IncrementCounter());
                             },
                             child: const Text("+")),
                       ],
@@ -88,13 +88,13 @@ class _CounterViewState extends State<CounterView> {
                         children: [
                           ElevatedButton(
                               onPressed: () {
-                                counterInstance.add(DecrementCounter());
+                                counterInstance.add(const DecrementCounter());
                               },
                               child: const Text("-")),
                           const SizedBox(width: 10),
                           ElevatedButton(
                               onPressed: () {
-                                counterInstance.add(IncrementCounter());
+                                counterInstance.add(const IncrementCounter());
                               },
                               child: const Text("+")),
                         ],

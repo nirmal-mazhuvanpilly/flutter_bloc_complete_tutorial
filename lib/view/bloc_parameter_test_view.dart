@@ -39,13 +39,13 @@ class BlocParameterTestView extends StatelessWidget {
                   children: [
                     ElevatedButton(
                         onPressed: () {
-                          counterBloc.add(DecrementCounter());
+                          counterBloc.add(const DecrementCounter());
                         },
                         child: const Text("-")),
                     const SizedBox(width: 10),
                     ElevatedButton(
                         onPressed: () {
-                          counterBloc.add(IncrementCounter());
+                          counterBloc.add(const IncrementCounter());
                         },
                         child: const Text("+")),
                   ],
