@@ -23,9 +23,7 @@ class JokesView extends StatelessWidget {
       body: BlocListener<CounterBloc, CounterState>(
         listener: (context, state) {
           if (state is CounterStateLoaded) {
-            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-              content: Text('snack'),
-            ));
+            debugPrint("CounterStateLoaded");
           }
         },
         child: Column(
